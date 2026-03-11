@@ -1,0 +1,61 @@
+from google.colab import files
+uploaded = files.upload()
+
+import pandas as pd
+import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
+from sklearn.preprocessing import LabelEncoder
+
+# read dataset
+data = pd.read_csv("gender_knn.csv", header=None)
+
+# convert horizontal dataset to vertical format
+data = data.set_index(0).T
+data.columns = ["Gender","Height","Weight","Index"]
+
+# convert values
+data["Height"] = data["Height"].astype(float)
+data["Weight"] = data["Weight"].astype(float)
+data["Index"] = data["Index"].astype(float)
+
+# convert gender to numbers
+le = LabelEncoder()
+data["Gender"] = le.fit_transform(data["Gender"])
+
+X = data[["Height","Weight"]]
+y = data["Gender"]
+
+# KNN model
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(X,y)
+
+y_pred = model.predict(X)
+
+print("Accuracy:",accuracy_score(y,y_pred))
+print("Precision:",precision_score(y,y_pred))
+print("Recall:",recall_score(y,y_pred))
+print("F1 Score:",f1_score(y,y_pred))
+
+
+Problem Understanding & Aim
+To predict gender based on height and weight using K-Nearest Neighbor algorithm.
+
+Data Collection & Pre-Processing
+Dataset contains Gender, Height, Weight and Index.
+Gender values are converted into numerical values.
+
+Model Design / Algorithm Selection
+K-Nearest Neighbor classifier is used to classify gender.
+
+Implementation – Model Building
+Import libraries.
+Load dataset.
+Train KNN classifier.
+Predict gender values.
+
+Evaluation & Output
+Model performance evaluated using Accuracy, Precision, Recall and F1-Score.
+
+Viva / Concept Clarity
+KNN classifies data based on the nearest neighbours using distance calculation.
