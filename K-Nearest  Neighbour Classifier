@@ -6,36 +6,55 @@ import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
 from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
 
 # read dataset
 data = pd.read_csv("gender_knn.csv", header=None)
 
-# convert horizontal dataset to vertical format
+# convert horizontal dataset to vertical
 data = data.set_index(0).T
 data.columns = ["Gender","Height","Weight","Index"]
 
-# convert values
+# convert numeric columns
 data["Height"] = data["Height"].astype(float)
 data["Weight"] = data["Weight"].astype(float)
 data["Index"] = data["Index"].astype(float)
 
-# convert gender to numbers
+# encode gender
 le = LabelEncoder()
 data["Gender"] = le.fit_transform(data["Gender"])
 
 X = data[["Height","Weight"]]
 y = data["Gender"]
 
-# KNN model
+# train KNN
 model = KNeighborsClassifier(n_neighbors=3)
 model.fit(X,y)
 
+# prediction
 y_pred = model.predict(X)
 
-print("Accuracy:",accuracy_score(y,y_pred))
-print("Precision:",precision_score(y,y_pred))
-print("Recall:",recall_score(y,y_pred))
-print("F1 Score:",f1_score(y,y_pred))
+# evaluation
+print("Accuracy:", accuracy_score(y,y_pred))
+print("Precision:", precision_score(y,y_pred))
+print("Recall:", recall_score(y,y_pred))
+print("F1 Score:", f1_score(y,y_pred))
+
+# plot K vs accuracy
+k_range = range(1,10)
+scores = []
+
+for k in k_range:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X,y)
+    pred = knn.predict(X)
+    scores.append(accuracy_score(y,pred))
+
+plt.plot(k_range, scores, marker='o')
+plt.xlabel("Value of K")
+plt.ylabel("Accuracy")
+plt.title("KNN Accuracy vs K")
+plt.show()
 
 
 Problem Understanding & Aim
