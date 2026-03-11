@@ -1,0 +1,53 @@
+from google.colab import files
+uploaded = files.upload()
+
+import pandas as pd
+import numpy as np
+from sklearn.svm import SVC
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
+
+# read dataset
+data = pd.read_csv("play_golf_svm.csv", header=None)
+
+# convert horizontal dataset to vertical format
+data = data.set_index(0).T
+data.columns = ["Outlook","Temperature","Humidity","Windy","Play"]
+
+# encode categorical values
+le = LabelEncoder()
+for column in data.columns:
+    data[column] = le.fit_transform(data[column])
+
+X = data[["Outlook","Temperature","Humidity","Windy"]]
+y = data["Play"]
+
+# SVM model
+model = SVC(kernel="linear")
+model.fit(X,y)
+
+y_pred = model.predict(X)
+
+print("Accuracy:", accuracy_score(y,y_pred))
+print("Precision:", precision_score(y,y_pred))
+print("Recall:", recall_score(y,y_pred))
+print("F1 Score:", f1_score(y,y_pred))
+
+
+Problem Understanding & Aim
+To predict whether the player will play golf using Temperature, Humidity and Wind using SVM classifier.
+
+Data Collection & Pre-Processing
+Dataset contains Outlook, Temperature, Humidity, Windy and Play Golf. Categorical values are converted into numerical form.
+
+Model Design / Algorithm Selection
+Support Vector Machine classifier is used for classification.
+
+Implementation – Model Building
+Import libraries. Load dataset. Encode categorical data. Train SVM model and predict output.
+
+Evaluation & Output
+Model performance evaluated using Accuracy, Precision, Recall and F1 Score.
+
+Viva / Concept Clarity
+SVM is a supervised learning algorithm used for classification by finding the optimal hyperplane that separates data points.
