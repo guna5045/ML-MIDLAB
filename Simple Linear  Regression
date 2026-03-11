@@ -34,3 +34,31 @@ print("MAE:", mae)
 print("RMSE:", rmse)
 print("RMSLE:", rmsle)
 print("R2 Score:", r2)
+
+
+
+1. Problem Understanding & Aim (CO1)
+Aim. To predict employee salary based on experience using Simple Linear Regression.
+
+2. Data Collection & Pre-Processing (CO6)
+Dataset contains two variables. Experience and Salary.
+Data is loaded from CSV file using pandas.
+Experience is taken as X and Salary as y.
+
+3. Model Design / Algorithm Selection (CO2, CO3)
+Simple Linear Regression is used.
+It finds the relationship between experience and salary using a straight line.
+
+4. Implementation – Model Building (CO3, CO4, CO5)
+Import libraries.
+Load dataset.
+Separate X and y variables.
+Train Linear Regression model.
+Predict salary values.
+
+5. Evaluation & Output (CO7)
+Model performance evaluated using.
+SSE, MSSE, MAE, RMSE, RMSLE and R² score.
+
+6. Viva / Concept Clarity (CO1, CO4)
+Simple Linear Regression predicts continuous values using one independent variable and one dependent variable.
