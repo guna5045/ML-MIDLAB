@@ -5,12 +5,14 @@ import pandas as pd
 import numpy as np
 from sklearn.naive_bayes import GaussianNB
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
+from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # read dataset
 data = pd.read_csv("fish_nb.csv", header=None)
 
-# convert horizontal dataset to vertical format
+# convert horizontal dataset to vertical
 data = data.set_index(0).T
 data.columns = ["Species","Weight","Height","Width","Length1","Length2","Length3"]
 
@@ -29,12 +31,24 @@ y = data["Species"]
 model = GaussianNB()
 model.fit(X,y)
 
+# prediction
 y_pred = model.predict(X)
 
+# evaluation metrics
 print("Accuracy:", accuracy_score(y,y_pred))
 print("Precision:", precision_score(y,y_pred,average="macro"))
 print("Recall:", recall_score(y,y_pred,average="macro"))
 print("F1 Score:", f1_score(y,y_pred,average="macro"))
+
+# confusion matrix
+cm = confusion_matrix(y,y_pred)
+
+plt.figure(figsize=(6,4))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix - Naive Bayes")
+plt.show()
 
 Problem Understanding & Aim
 To classify fish species using features like weight, height, width and lengths using Naïve Bayes classifier.
