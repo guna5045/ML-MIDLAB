@@ -6,11 +6,13 @@ import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
 from sklearn.preprocessing import LabelEncoder
+from sklearn import tree
+import matplotlib.pyplot as plt
 
 # read dataset
 data = pd.read_csv("iris_tree.csv", header=None)
 
-# convert horizontal to vertical format
+# convert horizontal dataset to vertical
 data = data.set_index(0).T
 data.columns = ["SLength","SWidth","PLength","PWidth","Species"]
 
@@ -20,23 +22,35 @@ data["SWidth"] = data["SWidth"].astype(float)
 data["PLength"] = data["PLength"].astype(float)
 data["PWidth"] = data["PWidth"].astype(float)
 
-# convert species to numbers
+# encode species
 le = LabelEncoder()
 data["Species"] = le.fit_transform(data["Species"])
 
 X = data[["SLength","SWidth","PLength","PWidth"]]
 y = data["Species"]
 
-# Decision Tree model (ID3 uses entropy)
+# Decision Tree using ID3 (entropy)
 model = DecisionTreeClassifier(criterion="entropy")
 model.fit(X,y)
 
+# prediction
 y_pred = model.predict(X)
 
-print("Accuracy:",accuracy_score(y,y_pred))
-print("Precision:",precision_score(y,y_pred,average="macro"))
-print("Recall:",recall_score(y,y_pred,average="macro"))
-print("F1 Score:",f1_score(y,y_pred,average="macro"))
+# evaluation metrics
+print("Accuracy:", accuracy_score(y,y_pred))
+print("Precision:", precision_score(y,y_pred,average="macro"))
+print("Recall:", recall_score(y,y_pred,average="macro"))
+print("F1 Score:", f1_score(y,y_pred,average="macro"))
+
+# decision tree diagram
+plt.figure(figsize=(10,6))
+tree.plot_tree(
+    model,
+    feature_names=["SLength","SWidth","PLength","PWidth"],
+    class_names=["setosa","versicolor","virginica"],
+    filled=True
+)
+plt.show()
 
 
 
