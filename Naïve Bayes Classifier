@@ -1,0 +1,55 @@
+from google.colab import files
+uploaded = files.upload()
+
+import pandas as pd
+import numpy as np
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
+
+# read dataset
+data = pd.read_csv("fish_nb.csv", header=None)
+
+# convert horizontal dataset to vertical format
+data = data.set_index(0).T
+data.columns = ["Species","Weight","Height","Width","Length1","Length2","Length3"]
+
+# convert numeric columns
+for col in ["Weight","Height","Width","Length1","Length2","Length3"]:
+    data[col] = data[col].astype(float)
+
+# encode species
+le = LabelEncoder()
+data["Species"] = le.fit_transform(data["Species"])
+
+X = data[["Weight","Height","Width","Length1","Length2","Length3"]]
+y = data["Species"]
+
+# Naive Bayes model
+model = GaussianNB()
+model.fit(X,y)
+
+y_pred = model.predict(X)
+
+print("Accuracy:", accuracy_score(y,y_pred))
+print("Precision:", precision_score(y,y_pred,average="macro"))
+print("Recall:", recall_score(y,y_pred,average="macro"))
+print("F1 Score:", f1_score(y,y_pred,average="macro"))
+
+Problem Understanding & Aim
+To classify fish species using features like weight, height, width and lengths using Naïve Bayes classifier.
+
+Data Collection & Pre-Processing
+Dataset contains fish measurements and species. Species labels are converted into numerical values.
+
+Model Design / Algorithm Selection
+Naïve Bayes classifier is selected for classification.
+
+Implementation – Model Building
+Import libraries. Load dataset. Train Naïve Bayes model. Predict species.
+
+Evaluation & Output
+Model performance evaluated using Accuracy, Precision, Recall and F1 Score.
+
+Viva / Concept Clarity
+Naïve Bayes is a probabilistic classifier based on Bayes theorem with the assumption of feature independence.
